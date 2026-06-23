@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Hearts Inward</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #heart-container {
+            position: relative;
+            width: 800px;
+            height: 800px;
+        }
+
+        .love-word {
+            position: absolute;
+            color: #ff2d55;
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+            text-shadow: 0 0 5px #ff2d55;
+            opacity: 0;
+            animation: heart-fade 4s infinite ease-in-out;
+        }
+
+        @keyframes heart-fade {
+            0%, 100% { opacity: 0; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="heart-container"></div>
+
+    <script>
+        const container = document.getElementById('heart-container');
+
+        const layers = 15;
+        const baseWordsCount = 40;
+        const baseScale = 20;
+
+        for (let l = 1; l <= layers; l++) {
+            const currentScale = (l / layers) * baseScale;
+            const wordsInLayer = Math.floor(baseWordsCount * (l / layers));
+
+            for (let i = 0; i < wordsInLayer; i++) {
+                const word = document.createElement('div');
+                word.className = 'love-word';
+                word.innerText = 'i love you';
+
+                const t = (i / wordsInLayer) * 2 * Math.PI;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+                word.style.left = `${x * currentScale + 400}px`;
+                word.style.top = `${y * currentScale + 400}px`;
+
+                // ЛОГИКА ИНВЕРСИИ: (layers - l) дает маленькую задержку для больших слоев
+                // и большую задержку для маленьких (центральных) слоев.
+                word.style.animationDelay = `${(layers - l) * 0.25 + i * 0.02}s`;
+
+                container.appendChild(word);
+            }
+        }
+    </script>
+</body>
+</html>

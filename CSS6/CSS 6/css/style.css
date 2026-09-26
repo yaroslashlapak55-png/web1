@@ -1,0 +1,237 @@
+*{
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+*,*:before, *:after{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+:focus,:active{outline: none;}
+a:focus,a:active{outline: none;}
+
+nav, footer,header,aside{display: block;}
+
+html,body {
+    height: 100%;
+    width: 100%;
+    font-size: 100%;
+    line-height: 1;
+    font-size: 14px;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+input,button,textarea{font-family: inherit;}
+
+input::-ms-clear{display: none;}
+button{cursor: pointer;}
+button::-moz-focus-inner {padding:0;border:0;}
+a, a:visited {text-decoration: none;}
+a:hover{text-decoration: none;}
+ul li{list-style: none ;}
+img{vertical-align: top;}
+h1,h2,h3,h4,h5,h6{font-size: inherit;font-weight: 400;}
+
+body{
+   padding: 30px;
+   background: url(../img/Minecraft2.png);
+}
+
+.list{
+    margin: 0 0 50px 0;
+}
+.list li{
+    font-size: 29px;
+    margin: 0 0 30px 0;
+    
+    
+    padding: 30px;
+}
+.list li:before{
+    background: url(../img/galochka.png) left/ 30px 30px no-repeat;
+
+}
+.list li:nth-child(1){
+    text-decoration: line-through;
+}
+.list li:nth-child(1):hover{
+    text-decoration: none;
+}
+
+.list li:nth-child(2){
+    text-shadow: 1px 1px 1px black;
+}
+.list li:nth-child(2):hover{
+    color: green;
+}
+
+.list li:nth-child(3){
+    font-style: oblique;
+}
+.list li:nth-child(3):hover{
+    font-style: normal;
+}
+
+.list li:nth-child(4){
+    text-transform: uppercase;
+}
+.list li:nth-child(4):hover{
+    text-transform: none;
+}
+
+.but{
+    background-color: gray;
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    width: 300px;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 15px;
+}
+.but:hover{
+    background-color: rgb(46, 44, 44);
+}
+.but:active{
+    background-color: blue;
+}
+.txt{
+    border: 1px solid blue;
+    height: 50px;
+    padding: 0 15px;
+    font-size: 18px;
+    width: 300px;
+    margin: 0 0 10px 0;    
+
+}
+.txt:hover{
+    border: 1px solid red;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+.block{}
+.block p{
+    font-size: 18px;
+    line-height: 24px;
+    margin: 0 0 20px 0;
+
+}
+.link{
+    color: red;
+    font-weight: 700;
+}
+.link:hover{
+    text-decoration: underline;
+    color: blue;
+}
+.link:visited{
+    color: purple;
+    text-decoration: underline;
+}
+.link:active{
+    color: yellow;
+    text-decoration: underline;
+}
+.txt{
+    border: 1px solid blue;
+    height: 50px;
+    padding: 0 15px;
+    font-size: 18px;
+    width: 300px;
+    margin: 0 0 10px 0;    
+
+}
+.txt:focus{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    border: 1px solid red;
+}
+.but{
+    display: block;
+    width: 300px;
+    height: 50px;
+    background-color: blueviolet;
+    text-transform: uppercase;
+    margin: 0 0 20px 0;
+}
+.but:hover{
+    background-color: black;
+    color: blue;
+}
+.but:active{
+    background-color: red;
+    color: gray;
+}
+.list{
+
+
+}
+.list li{
+    font-size: 18px;
+    margin: 0 0 10px 0;
+}
+.list li:first-child{
+    color: red;
+}
+.list li:last-child{
+    color: blue;
+}
+.list li:nth-child(3){
+    color: green;
+}
+/* 1,3,5,7,9. Обращается ко всем нечетным элементам 
+.list li:nth-child(odd){
+    color: red;
+    text-transform: uppercase;
+}*/
+/* Обращается ко всем четным
+.list li:nth-child(even){
+    text-transform: uppercase;
+}*/

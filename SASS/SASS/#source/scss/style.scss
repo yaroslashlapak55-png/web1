@@ -1,0 +1,43 @@
+@import "nullstyle.scss";
+//переменная
+$fz:30px;
+//шаблон
+%tpxdada{
+    border-bottom: 5px dashed black;
+}
+@mixin fontz($f, $c){
+    font-size: $f;
+    color: $c;
+}
+
+.block{
+    width: 300px / 960px * 100%;
+    padding: 30px;
+    font-size: $fz;
+    line-height: 60px;
+        span{
+           color: grey;
+           background: url('../');
+    
+    .block___text{
+        font-size: $fz;
+    
+    .pp{
+        font-size: $fz;
+        color: revert;
+            }   
+        }
+    }
+}
+.link{
+    color: darkred;
+    text-decoration: underline;
+    &:hover{
+        color: greenyellow ;
+    }
+    @extend %tpxdada;;
+}
+.link2{
+    @include fontz(100px, green);
+
+}

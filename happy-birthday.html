@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>С Днём Рождения 🎁</title>
+<style>
+  :root{
+    --bg:#03040c;
+    --card-bg: rgba(255,255,255,0.08);
+    --card-border: rgba(255,255,255,0.18);
+    --text:#f4f2ff;
+    --accent:#ffd166;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    height:100%;
+    margin:0;
+    background: var(--bg);
+    overflow:hidden;
+  }
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+
+  /* --- Space background --- */
+  #sky{
+    position:fixed;
+    inset:0;
+    background: radial-gradient(ellipse at 20% 20%, rgba(80,40,120,0.35), transparent 55%),
+                radial-gradient(ellipse at 80% 75%, rgba(20,60,120,0.35), transparent 55%),
+                linear-gradient(180deg, #05030f 0%, #030312 60%, #000 100%);
+    overflow:hidden;
+    z-index:0;
+  }
+  .star{
+    position:absolute;
+    background:#fff;
+    border-radius:50%;
+    opacity:0.6;
+    animation: twinkle linear infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:0.15;}
+    50%{opacity:1;}
+  }
+  .shooting-star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background: linear-gradient(90deg, #fff, transparent);
+    border-radius:50%;
+    opacity:0;
+    animation: shoot 6s linear infinite;
+  }
+  @keyframes shoot{
+    0%{ opacity:0; transform: translate(0,0) rotate(215deg) scaleX(1); }
+    3%{ opacity:1; }
+    10%{ opacity:0; transform: translate(-420px, 300px) rotate(215deg) scaleX(120); }
+    100%{ opacity:0; }
+  }
+
+  /* --- Stage --- */
+  #stage{
+    position:relative;
+    width:min(90vw, 600px);
+    height:min(90vw, 600px);
+    max-height:80vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+  }
+
+  #gift{
+    font-size: clamp(3.5rem, 12vw, 5.5rem);
+    cursor:pointer;
+    filter: drop-shadow(0 0 25px rgba(255,209,102,0.55));
+    transition: transform 0.35s ease, opacity 0.5s ease;
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #gift:hover{ transform: scale(1.12) rotate(-4deg); }
+  #gift.hidden{
+    opacity:0;
+    transform: scale(0.3);
+    pointer-events:none;
+    position:absolute;
+  }
+
+  #greeting{
+    position:absolute;
+    left:50%; top:50%;
+    transform: translate(-50%,-50%) scale(0.85);
+    background: var(--card-bg);
+    border:1px solid var(--card-border);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 18px 26px;
+    max-width: min(78vw, 320px);
+    text-align:center;
+    font-size: clamp(1rem, 3.4vw, 1.3rem);
+    font-weight:600;
+    letter-spacing:0.3px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.9s ease, transform 0.9s ease;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    z-index:3;
+  }
+  #greeting.show{
+    opacity:1;
+    transform: translate(-50%,-50%) scale(1);
+  }
+
+  #lines{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    overflow:visible;
+    pointer-events:none;
+  }
+  .ray{
+    opacity:0;
+    stroke: rgba(255,255,255,0.45);
+    stroke-width:1.5;
+    stroke-dasharray: 4 5;
+    fill:none;
+    transition: opacity 1s ease;
+  }
+  .ray.show{ opacity:1; }
+
+  .orbit-emoji{
+    position:absolute;
+    left:50%; top:50%;
+    font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+    font-size: clamp(1.7rem, 5.2vw, 2.4rem);
+    opacity:0;
+    transform: translate(-50%,-50%) translate(0px,0px) scale(0.2);
+    transition: transform 1.4s cubic-bezier(.2,.8,.2,1), opacity 1.4s ease;
+    cursor:pointer;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.25));
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+    z-index:4;
+  }
+  .orbit-emoji.show{
+    opacity:1;
+    transform: translate(-50%,-50%) translate(var(--tx), var(--ty)) scale(1);
+  }
+  .orbit-emoji:hover, .orbit-emoji.active{
+    transform: translate(-50%,-50%) translate(var(--tx), var(--ty)) scale(1.25);
+  }
+
+  #tooltip{
+    position:fixed;
+    left:0;
+    top:0;
+    transform: translate(-50%,-50%) scale(0.85);
+    max-width: min(70vw, 300px);
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-size: clamp(0.8rem, 2.4vw, 0.95rem);
+    line-height:1.4;
+    text-align:center;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index:5;
+  }
+  #tooltip.show{
+    opacity:1;
+    transform: translate(-50%,-50%) scale(1);
+  }
+
+  .hint{
+    position:fixed;
+    top: calc(24px + env(safe-area-inset-top, 0px));
+    left:50%;
+    transform: translateX(-50%);
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    letter-spacing:0.5px;
+    z-index:2;
+    text-align:center;
+    padding: 0 16px;
+    transition: opacity 0.6s ease;
+  }
+  .hint.hide{ opacity:0; }
+</style>
+</head>
+<body>
+
+<div id="sky"></div>
+<div class="hint" id="hint">нажми на подарок 🎁</div>
+
+<div id="stage">
+  <svg id="lines"></svg>
+  <div id="gift">🎁</div>
+  <div id="greeting">Поздравляю с днём рождения...</div>
+  <!-- orbit emojis injected by JS -->
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+  // ----- starfield -----
+  const sky = document.getElementById('sky');
+  const STAR_COUNT = 140;
+  for(let i=0;i<STAR_COUNT;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random()*2 + 0.6;
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDuration = (2 + Math.random()*4)+'s';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    sky.appendChild(s);
+  }
+  for(let i=0;i<3;i++){
+    const sh = document.createElement('div');
+    sh.className='shooting-star';
+    sh.style.top = (Math.random()*40+5)+'%';
+    sh.style.left = (Math.random()*40+40)+'%';
+    sh.style.animationDelay = (Math.random()*10)+'s';
+    sky.appendChild(sh);
+  }
+
+  // ----- data -----
+  const items = [
+    { emoji:'🌟', text:'Желаю тебе всегда оставаться такой же яркой, быть такой же вдохновляющей и такой же красивой, как звёзды.' },
+    { emoji:'💨', text:'Желаю, чтобы ветер всегда сдувал твои проблемы быстрее, чем ты о них подумаешь.' },
+    { emoji:'⚡', text:'Оставайся такой же молниеносной, шустрой и быстрой в решении дел — пусть внутри тебя всегда горит тот самый огонёк скорости.' },
+    { emoji:'🧠', text:'Будь всегда безумно умной, какой являешься сейчас. Желаю, чтобы все трудные темы и моменты, которые сейчас непонятны, ты смогла понять быстрее, чем хотелось бы.' },
+    { emoji:'👷🏻', text:'Желаю тебе удачи в обучении и на пути к твоей самой главной мечте в жизни — пусть ты добьёшься всех своих целей и желаний, выстраивая всё словно по кирпичикам.' },
+    { emoji:'💐', text:'Оставайся всегда такой же красивой, какой являешься сейчас. Пусть твоя красота станет описанием для самого этого слова.' },
+    { emoji:'☀️', text:'И как же без главного — оставайся всегда позитивной. Пусть в твоей жизни будет меньше грусти и печали, а больше веселья, счастья и доброты.' }
+  ];
+
+  const stage = document.getElementById('stage');
+  const gift = document.getElementById('gift');
+  const greeting = document.getElementById('greeting');
+  const tooltip = document.getElementById('tooltip');
+  const hint = document.getElementById('hint');
+
+  const radius = () => Math.min(stage.clientWidth, stage.clientHeight) * 0.55;
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const linesSvg = document.getElementById('lines');
+  linesSvg.setAttribute('xmlns', svgNS);
+  const defs = document.createElementNS(svgNS, 'defs');
+  defs.innerHTML = `
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="rgba(255,255,255,0.55)"/>
+    </marker>`;
+  linesSvg.appendChild(defs);
+
+  const rayEls = items.map(() => {
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('class', 'ray');
+    line.setAttribute('marker-end', 'url(#arrowhead)');
+    linesSvg.appendChild(line);
+    return line;
+  });
+
+  const nodes = items.map((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'orbit-emoji';
+    el.textContent = item.emoji;
+    stage.appendChild(el);
+    return el;
+  });
+
+  function positionNodes(){
+    const r = radius();
+    const w = stage.clientWidth, h = stage.clientHeight;
+    linesSvg.setAttribute('width', w);
+    linesSvg.setAttribute('height', h);
+    linesSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    const cx = w / 2, cy = h / 2;
+    const startOffset = 68;
+    const endOffset = 30;
+    nodes.forEach((el, i) => {
+      const angle = (-90 + i * (360 / nodes.length)) * Math.PI / 180;
+      const x = Math.cos(angle) * r;
+      const y = Math.sin(angle) * r;
+      el.style.setProperty('--tx', x.toFixed(1) + 'px');
+      el.style.setProperty('--ty', y.toFixed(1) + 'px');
+
+      const ray = rayEls[i];
+      ray.setAttribute('x1', cx + Math.cos(angle) * startOffset);
+      ray.setAttribute('y1', cy + Math.sin(angle) * startOffset);
+      ray.setAttribute('x2', cx + Math.cos(angle) * (r - endOffset));
+      ray.setAttribute('y2', cy + Math.sin(angle) * (r - endOffset));
+    });
+  }
+  positionNodes();
+  window.addEventListener('resize', positionNodes);
+
+  let activeIdx = null;
+
+  function showTooltip(i){
+    tooltip.textContent = items[i].text;
+    tooltip.classList.add('show');
+    const rect = nodes[i].getBoundingClientRect();
+    const tw = tooltip.offsetWidth;
+    const th = tooltip.offsetHeight;
+    const margin = 14;
+    let cx = rect.left + rect.width / 2;
+    let cy = rect.top + rect.height / 2;
+    const minX = tw / 2 + margin;
+    const maxX = window.innerWidth - tw / 2 - margin;
+    const minY = th / 2 + margin;
+    const maxY = window.innerHeight - th / 2 - margin;
+    cx = Math.min(Math.max(cx, minX), maxX);
+    cy = Math.min(Math.max(cy, minY), maxY);
+    tooltip.style.left = cx + 'px';
+    tooltip.style.top = cy + 'px';
+    nodes.forEach(n => n.classList.remove('active'));
+    nodes[i].classList.add('active');
+    activeIdx = i;
+  }
+  function hideTooltip(){
+    tooltip.classList.remove('show');
+    nodes.forEach(n => n.classList.remove('active'));
+    activeIdx = null;
+  }
+
+  nodes.forEach((el, i) => {
+    el.addEventListener('mouseenter', () => showTooltip(i));
+    el.addEventListener('mouseleave', () => { if(activeIdx === i) hideTooltip(); });
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(activeIdx === i){ hideTooltip(); } else { showTooltip(i); }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if(!e.target.classList.contains('orbit-emoji')) hideTooltip();
+  });
+
+  let opened = false;
+  gift.addEventListener('click', () => {
+    if(opened) return;
+    opened = true;
+    hint.classList.add('hide');
+    gift.classList.add('hidden');
+    requestAnimationFrame(() => {
+      greeting.classList.add('show');
+    });
+    nodes.forEach((el, i) => {
+      setTimeout(() => {
+        el.classList.add('show');
+        rayEls[i].classList.add('show');
+      }, 500 + i * 1000);
+    });
+  });
+</script>
+
+</body>
+</html>
